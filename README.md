@@ -14,12 +14,14 @@ extends Node
 var db = SQLite.new();
 
 func _ready():
+	# http://www.wassen.net/sqlite-c.html
+	
 	# Open SQL
 	if db.open("user://data.sql") != db.SQLITE_OK:
 		print(db.get_errormsg());
 		return;
 	
-	# Create database if not exists
+	# Create table if not exists
 	db.prepare("CREATE TABLE IF NOT EXISTS demo (name TEXT, age INTEGER);");
 	if db.step() != db.SQLITE_DONE:
 		print(db.get_errormsg());
