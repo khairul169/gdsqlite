@@ -58,7 +58,7 @@ khairul_898 is 20 years old
 ```
 
 ## Public Methods:
-
+```
 int open( String path )
 void prepare( String query )
 int step()
@@ -70,9 +70,9 @@ String get_column_text( int col )
 void finalize()
 String get_errormsg()
 void close()
-
+```
 ## Constants:
-
+```
 SQLITE_OK = 0
 SQLITE_ERROR = 1
 SQLITE_INTERNAL = 2
@@ -104,3 +104,4 @@ SQLITE_NOTICE = 27
 SQLITE_WARNING = 28
 SQLITE_ROW = 100
 SQLITE_DONE = 101
+```
