@@ -5,6 +5,7 @@
 #include "reference.h"
 #include "ustring.h"
 
+#include <map>
 #include "sqlite/sqlite3.h"
 
 class SQLite : public Reference {
@@ -20,11 +21,15 @@ public:
 	
 	void prepare(String query);
 	int step();
+	int step_assoc();
 	int get_data_count();
 	int get_column_count();
 	int get_column_int(int col);
 	double get_column_double(int col);
 	String get_column_text(int col);
+	int get_column_int_assoc(String col);
+	double get_column_double_assoc(String col);
+	String get_column_text_assoc(String col);
 
 	void finalize();
 	String get_errormsg();
@@ -33,6 +38,8 @@ public:
 private:
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
+
+	std::map<String, unsigned int> _row_names;
 };
 
 #endif

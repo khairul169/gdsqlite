@@ -32,6 +32,15 @@ int SQLite::step() {
 	return sqlite3_step(stmt);
 }
 
+int SQLite::step_assoc() {
+	int ret = sqlite3_step(stmt);
+	if (_row_names.size() == 0) {
+		for(unsigned int i = 0; i < sqlite3_column_count(stmt); ++i)
+			_row_names[sqlite3_column_name(stmt,i)] = i;
+	}
+	return ret;
+}
+
 int SQLite::get_data_count() {
 	return sqlite3_data_count(stmt);
 }
@@ -52,8 +61,21 @@ String SQLite::get_column_text(int col) {
 	return (char *)sqlite3_column_text(stmt, col);
 }
 
+int SQLite::get_column_int_assoc(String col) {
+	return sqlite3_column_int(stmt, _row_names[col]);
+}
+
+double SQLite::get_column_double_assoc(String col) {
+	return sqlite3_column_double(stmt, _row_names[col]);
+}
+
+String SQLite::get_column_text_assoc(String col) {
+	return (char *)sqlite3_column_text(stmt, _row_names[col]);
+}
+
 void SQLite::finalize() {
 	sqlite3_finalize(stmt);
+	_row_names.clear();
 }
 
 String SQLite::get_errormsg() {
@@ -68,6 +90,8 @@ void SQLite::_bind_methods() {
 	ObjectTypeDB::bind_method("open", &SQLite::open);
 	ObjectTypeDB::bind_method("prepare", &SQLite::prepare);
 	ObjectTypeDB::bind_method("step", &SQLite::step);
+	ObjectTypeDB::bind_method("step_assoc", &SQLite::step_assoc);
+
 	ObjectTypeDB::bind_method("get_data_count", &SQLite::get_data_count);
 	ObjectTypeDB::bind_method("get_column_count", &SQLite::get_column_count);
 	ObjectTypeDB::bind_method("get_column_int", &SQLite::get_column_int);
@@ -76,6 +100,10 @@ void SQLite::_bind_methods() {
 	ObjectTypeDB::bind_method("finalize", &SQLite::finalize);
 	ObjectTypeDB::bind_method("get_errormsg", &SQLite::get_errormsg);
 	ObjectTypeDB::bind_method("close", &SQLite::close);
+
+	ObjectTypeDB::bind_method("get_column_int_assoc", &SQLite::get_column_int_assoc);
+	ObjectTypeDB::bind_method("get_column_double_assoc", &SQLite::get_column_double_assoc);
+	ObjectTypeDB::bind_method("get_column_text_assoc", &SQLite::get_column_text_assoc);
 	
 	BIND_CONSTANT(SQLITE_OK);
 	BIND_CONSTANT(SQLITE_ERROR);
