@@ -5,7 +5,7 @@
 #include "reference.h"
 #include "ustring.h"
 
-#include <map>
+#include "map.h"
 #include "sqlite/sqlite3.h"
 
 class SQLite : public Reference {
@@ -39,7 +39,7 @@ private:
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 
-	std::map<String, unsigned int> _row_names;
+	Map<String, unsigned int> _row_names;
 };
 
 #endif
