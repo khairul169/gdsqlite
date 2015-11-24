@@ -3,6 +3,8 @@ Import('env')
 
 if env['platform'] == 'android':
     env.Append(LIBS=['dl'])
+elif env['platform'] == 'windows':
+    pass
 else:
     env.Append(LIBS=['pthread', 'dl'])
 
