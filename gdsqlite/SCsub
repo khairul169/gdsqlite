@@ -1,7 +1,12 @@
 # SCsub
 Import('env')
 
-env.Append(LIBS=['pthread', 'dl'])
+if env['platform'] == 'android':
+    env.Append(LIBS=['dl'])
+elif env['platform'] == 'windows':
+    pass
+else:
+    env.Append(LIBS=['pthread', 'dl'])
 
 env.add_source_files(env.modules_sources,"*.cpp") # just add all cpp files to the build
 env.add_source_files(env.modules_sources,"sqlite/*.c") # add sqlite sources
