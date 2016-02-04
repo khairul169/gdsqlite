@@ -14,49 +14,73 @@ extends Node
 var db = SQLite.new();
 
 func _ready():
-	# http://www.wassen.net/sqlite-c.html
-	
 	# Open SQL
 	if db.open("user://data.sql") != db.SQLITE_OK:
-		print(db.get_errormsg());
+		print("ERR: ", db.get_errormsg());
 		return;
 	
-	# Create table if not exists
-	db.prepare("CREATE TABLE IF NOT EXISTS demo (name TEXT, age INTEGER);");
+	# Create database if not exists
+	db.prepare("CREATE TABLE IF NOT EXISTS players (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, playcount INTEGER);");
 	if db.step() != db.SQLITE_DONE:
-		print(db.get_errormsg());
-	db.finalize();
-	
-	# Insert Operation
-	randomize();
-	var query = str("INSERT INTO demo (name, age) VALUES ('khairul_", int(rand_range(99,999)) ,"', '", int(rand_range(17,25)) ,"');");
-	db.prepare(query);
-	if db.step() != db.SQLITE_DONE:
-		print(db.get_errormsg());
+		print("ERR: ", db.get_errormsg());
 	db.finalize();
 	
 	# Select Operation
-	db.prepare(str("SELECT name, age FROM demo WHERE age > 16;"));
+	db.prepare(str("SELECT * FROM players WHERE name = 'khairul' LIMIT 1;"));
+	var rows = 0;
+	var uid = -1;
+	var playcount = 0;
 	
-	while db.step() == db.SQLITE_ROW:
-		print(db.get_column_text(0), " is ", db.get_column_int(1), " years old");
+	while true:
+		var step = db.step_assoc();
+		
+		if step == db.SQLITE_ROW:
+			print("ID: ", db.get_column_int_assoc("id"), " | Name: ", db.get_column_text_assoc("name"), " | Email: ", db.get_column_text_assoc("email"), " | Play Count: ", db.get_column_int_assoc("playcount"));
+			
+			uid = db.get_column_int_assoc("id");
+			playcount = db.get_column_int_assoc("playcount");
+			rows += 1;
+		
+		elif step == db.SQLITE_DONE:
+			print("Fetch data completed.");
+			print("Total result: ", rows);
+			break;
+		
+		else:
+			print("Fetch data failed.");
+			print("ERR: ", db.get_errormsg());
+			break;
 	
 	db.finalize();
 	
-	# Delete all data
-	db.prepare("DELETE FROM demo;");
-	if db.step() != db.SQLITE_DONE:
-		print(db.get_errormsg());
-	db.finalize();
+	playcount += 1;
+	
+	if rows <= 0:
+		# Insert Operation
+		db.prepare(str("INSERT INTO players (name, email) VALUES ('khairul', '", escape_string("' \" \\n khairul169x@gmail.com"), "');"));
+		if db.step() != db.SQLITE_DONE:
+			print("ERR: ", db.get_errormsg());
+		db.finalize();
+	else:
+		# Update Operation
+		db.prepare(str("UPDATE players SET playcount='", playcount, "' WHERE id='", uid, "';"));
+		if db.step() != db.SQLITE_DONE:
+			print("ERR: ", db.get_errormsg());
+		db.finalize();
 	
 	# Close SQL
 	db.close();
+
+func escape_string(string):
+	return string.replace("'","''");
 ```
 
 ### Sample Output:
 
 ```
-khairul_898 is 20 years old
+ID: 1 | Name: khairul | Email: ' " \n khairul169x@gmail.com | Play Count: 7
+Fetch data completed.
+Total result: 1
 ```
 
 ## Public Methods:
@@ -64,11 +88,15 @@ khairul_898 is 20 years old
 int open( String path )
 void prepare( String query )
 int step()
+int step_assoc()
 int get_data_count()
 int get_column_count()
 int get_column_int( int col )
+int get_column_int_assoc( String col )
 float get_column_double( int col )
+float get_column_double_assoc( String col )
 String get_column_text( int col )
+String get_column_text_assoc( String col )
 void finalize()
 String get_errormsg()
 void close()
