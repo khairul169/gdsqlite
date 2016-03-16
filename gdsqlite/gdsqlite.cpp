@@ -21,11 +21,11 @@ int SQLite::open(String path) {
 		else path = path.replace("user://", "");
 	}
 	
-	return sqlite3_open(path.ascii().get_data(), &db);
+	return sqlite3_open(path.utf8().get_data(), &db);
 }
 
 void SQLite::prepare(String query) {
-	sqlite3_prepare_v2(db, query.ascii().get_data(), -1, &stmt, NULL);
+	sqlite3_prepare_v2(db, query.utf8().get_data(), -1, &stmt, NULL);
 }
 
 int SQLite::step() {
@@ -58,7 +58,7 @@ double SQLite::get_column_double(int col) {
 }
 
 String SQLite::get_column_text(int col) {
-	return (char *)sqlite3_column_text(stmt, col);
+	return String::utf8((char *)sqlite3_column_text(stmt, col));
 }
 
 int SQLite::get_column_int_assoc(String col) {
@@ -70,7 +70,7 @@ double SQLite::get_column_double_assoc(String col) {
 }
 
 String SQLite::get_column_text_assoc(String col) {
-	return (char *)sqlite3_column_text(stmt, _row_names[col]);
+	return String::utf8((char *)sqlite3_column_text(stmt, _row_names[col]));
 }
 
 void SQLite::finalize() {
