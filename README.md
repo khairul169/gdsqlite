@@ -20,7 +20,7 @@ compile~
 
 ```python
 extends Node
-
+	
 var db = SQLite.new();
 
 func _ready():
@@ -28,77 +28,47 @@ func _ready():
 	if db.open("user://data.sql") != db.SQLITE_OK:
 		print("ERR: ", db.get_errormsg());
 		return;
-	
+
 	# Create database if not exists
-	db.prepare("CREATE TABLE IF NOT EXISTS players (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, playcount INTEGER);");
-	if db.step() != db.SQLITE_DONE:
-		print("ERR: ", db.get_errormsg());
-	db.finalize();
+	db.query("CREATE TABLE IF NOT EXISTS players (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, playcount INTEGER);");
 	
 	# Select Operation
-	db.prepare(str("SELECT * FROM players WHERE name = 'khairul' LIMIT 1;"));
-	var rows = 0;
-	var uid = -1;
-	var playcount = 0;
-	
-	while true:
-		var step = db.step_assoc();
+	for i in db.fetch_array("SELECT * FROM players LIMIT 100;"):
+		print(i);
 		
-		if step == db.SQLITE_ROW:
-			print("ID: ", db.get_column_int_assoc("id"), " | Name: ", db.get_column_text_assoc("name"), " | Email: ", db.get_column_text_assoc("email"), " | Play Count: ", db.get_column_int_assoc("playcount"));
-			
-			uid = db.get_column_int_assoc("id");
-			playcount = db.get_column_int_assoc("playcount");
-			rows += 1;
-		
-		elif step == db.SQLITE_DONE:
-			print("Fetch data completed.");
-			print("Total result: ", rows);
-			break;
-		
-		else:
-			print("Fetch data failed.");
-			print("ERR: ", db.get_errormsg());
-			break;
-	
-	db.finalize();
-	
-	playcount += 1;
-	
-	if rows <= 0:
-		# Insert Operation
-		db.prepare(str("INSERT INTO players (name, email) VALUES ('khairul', '", escape_string("' \" \\n khairul169x@gmail.com"), "');"));
-		if db.step() != db.SQLITE_DONE:
-			print("ERR: ", db.get_errormsg());
-		db.finalize();
-	else:
 		# Update Operation
-		db.prepare(str("UPDATE players SET playcount='", playcount, "' WHERE id='", uid, "';"));
-		if db.step() != db.SQLITE_DONE:
-			print("ERR: ", db.get_errormsg());
-		db.finalize();
+		db.query("UPDATE players SET playcount='"+str(i["playcount"]+1)+"' WHERE id='"+str(i["id"])+"';");
 	
-	# Close SQL
+	# Insert Operation
+	db.query("INSERT INTO players (name, email, playcount) VALUES ('khairul', 'my@mail.com', '0');");
+	
+	# Remove Operation
+	db.query("DELETE FROM players WHERE playcount > '5';");
+	
 	db.close();
-
-func escape_string(string):
-	return string.replace("'","''");
 ```
 
 ### Sample Output:
 
 ```
-ID: 1 | Name: khairul | Email: ' " \n khairul169x@gmail.com | Play Count: 7
-Fetch data completed.
-Total result: 1
+(email:my@mail.com), (id:14), (name:khairul), (playcount:5)
+(email:my@mail.com), (id:15), (name:khairul), (playcount:4)
+(email:my@mail.com), (id:16), (name:khairul), (playcount:3)
+(email:my@mail.com), (id:17), (name:khairul), (playcount:2)
+(email:my@mail.com), (id:18), (name:khairul), (playcount:1)
+(email:my@mail.com), (id:19), (name:khairul), (playcount:0)
 ```
 
-## Public Methods:
+## Functions:
 ```
 int open( String path )
 void prepare( String query )
 int step()
 int step_assoc()
+Array fetch_array( String query )
+Array fetch_assoc()
+Array fetch_one()
+int query( String query )
 int get_data_count()
 int get_column_count()
 int get_column_int( int col )
