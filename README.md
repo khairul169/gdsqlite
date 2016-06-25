@@ -6,6 +6,16 @@ A [SQLite](https://www.sqlite.org/) wrapper for Godot Engine.
 
 To install, clone latest source of Godot Engine, drop the `gdsqlite` directory in the `godot/modules` directory and compile it.
 
+
+Command line:
+```
+git clone https://github.com/godotengine/godot.git
+cd godot/modules
+git clone https://github.com/khairul169/gdsqlite.git
+cd ../../
+compile~
+```
+
 ## Example
 
 ```python
