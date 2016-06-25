@@ -22,6 +22,10 @@ public:
 	void prepare(String query);
 	int step();
 	int step_assoc();
+	Array fetch_assoc();
+	Array fetch_one();
+	Array fetch_array(String query);
+	int query(String query);
 	int get_data_count();
 	int get_column_count();
 	int get_column_int(int col);
@@ -30,7 +34,7 @@ public:
 	int get_column_int_assoc(String col);
 	double get_column_double_assoc(String col);
 	String get_column_text_assoc(String col);
-
+	
 	void finalize();
 	String get_errormsg();
 	void close();
