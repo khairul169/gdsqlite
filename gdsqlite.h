@@ -9,7 +9,7 @@
 #include "sqlite/sqlite3.h"
 
 class SQLite : public Reference {
-	OBJ_TYPE(SQLite,Reference);
+	GDCLASS(SQLite,Reference);
 
 protected:
 	static void _bind_methods();

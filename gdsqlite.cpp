@@ -134,27 +134,27 @@ void SQLite::close() {
 }
 
 void SQLite::_bind_methods() {
-	ObjectTypeDB::bind_method("open", &SQLite::open);
-	ObjectTypeDB::bind_method("prepare", &SQLite::prepare);
-	ObjectTypeDB::bind_method("step", &SQLite::step);
-	ObjectTypeDB::bind_method("step_assoc", &SQLite::step_assoc);
-	ObjectTypeDB::bind_method("fetch_assoc", &SQLite::fetch_assoc);
-	ObjectTypeDB::bind_method("fetch_one", &SQLite::fetch_one);
-	ObjectTypeDB::bind_method("fetch_array", &SQLite::fetch_array);
-	ObjectTypeDB::bind_method("query", &SQLite::query);
+	ClassDB::bind_method("open", &SQLite::open);
+	ClassDB::bind_method("prepare", &SQLite::prepare);
+	ClassDB::bind_method("step", &SQLite::step);
+	ClassDB::bind_method("step_assoc", &SQLite::step_assoc);
+	ClassDB::bind_method("fetch_assoc", &SQLite::fetch_assoc);
+	ClassDB::bind_method("fetch_one", &SQLite::fetch_one);
+	ClassDB::bind_method("fetch_array", &SQLite::fetch_array);
+	ClassDB::bind_method("query", &SQLite::query);
 
-	ObjectTypeDB::bind_method("get_data_count", &SQLite::get_data_count);
-	ObjectTypeDB::bind_method("get_column_count", &SQLite::get_column_count);
-	ObjectTypeDB::bind_method("get_column_int", &SQLite::get_column_int);
-	ObjectTypeDB::bind_method("get_column_double", &SQLite::get_column_double);
-	ObjectTypeDB::bind_method("get_column_text", &SQLite::get_column_text);
-	ObjectTypeDB::bind_method("finalize", &SQLite::finalize);
-	ObjectTypeDB::bind_method("get_errormsg", &SQLite::get_errormsg);
-	ObjectTypeDB::bind_method("close", &SQLite::close);
+	ClassDB::bind_method("get_data_count", &SQLite::get_data_count);
+	ClassDB::bind_method("get_column_count", &SQLite::get_column_count);
+	ClassDB::bind_method("get_column_int", &SQLite::get_column_int);
+	ClassDB::bind_method("get_column_double", &SQLite::get_column_double);
+	ClassDB::bind_method("get_column_text", &SQLite::get_column_text);
+	ClassDB::bind_method("finalize", &SQLite::finalize);
+	ClassDB::bind_method("get_errormsg", &SQLite::get_errormsg);
+	ClassDB::bind_method("close", &SQLite::close);
 
-	ObjectTypeDB::bind_method("get_column_int_assoc", &SQLite::get_column_int_assoc);
-	ObjectTypeDB::bind_method("get_column_double_assoc", &SQLite::get_column_double_assoc);
-	ObjectTypeDB::bind_method("get_column_text_assoc", &SQLite::get_column_text_assoc);
+	ClassDB::bind_method("get_column_int_assoc", &SQLite::get_column_int_assoc);
+	ClassDB::bind_method("get_column_double_assoc", &SQLite::get_column_double_assoc);
+	ClassDB::bind_method("get_column_text_assoc", &SQLite::get_column_text_assoc);
 	
 	BIND_CONSTANT(SQLITE_OK);
 	BIND_CONSTANT(SQLITE_ERROR);
