@@ -9,8 +9,8 @@ SQLite::SQLite() {
 
 int SQLite::open(String path) {
 	if (path.begins_with("res://")) {
-		if (Globals::get_singleton()) {
-			String resource_path = Globals::get_singleton()->get_resource_path();
+		if (GlobalConfig::get_singleton()) {
+			String resource_path = GlobalConfig::get_singleton()->get_resource_path();
 			if (resource_path != "") path = path.replace("res:/",resource_path);
 			else path = path.replace("res://", "");
 		}
