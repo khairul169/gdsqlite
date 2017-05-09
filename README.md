@@ -2,6 +2,8 @@
 
 A [SQLite](https://www.sqlite.org/) wrapper for Godot Engine.
 
+### For Godot 3.0, you don't need to recompile the whole engine, just use https://github.com/khairul169/gdsqlite-native for easy usage.
+
 ## Installation
 
 To install, clone latest stable version of Godot Engine, drop the `gdsqlite` directory in the `godot/modules` directory and compile it.
